@@ -2,6 +2,7 @@ package com.example.bookmanager
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bookmanager.databinding.ItemBinding
 import java.util.*
@@ -9,7 +10,7 @@ import java.util.*
 class BookAdapter(private val listener: BookListener) : RecyclerView.Adapter<BookViewHolder>(),
     ItemTouchHelperAdapter {
 
-    private var books = mutableListOf<Book>()
+    private var books = MutableLiveData<MutableList<Book>>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -18,59 +19,56 @@ class BookAdapter(private val listener: BookListener) : RecyclerView.Adapter<Boo
     }
 
     override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        getItem(position)?.let { holder.bind(it) }
     }
 
-    private fun getItem(position: Int): Book {
-        return books[position]
+    private fun getItem(position: Int): Book? {
+        return books.value?.get(position)
     }
 
     override fun getItemCount(): Int {
-        return books.size
+        return books.value?.size!!
     }
 
     fun sortByTitle() {
-        books.sortBy { it.title }
-        notifyDataSetChanged()
+        books.value?.sortedBy { it.title }
     }
 
     fun sortByAuthor() {
-        books.sortBy { it.author }
+        books.value?.sortedBy { it.author }
     }
 
     fun sortByYear() {
-        books.sortBy { it.year }
+        books.value?.sortedBy { it.year }
     }
 
     fun setBooks(stopwatchList: List<Book>) {
-        books = stopwatchList as MutableList<Book>
+        books.value = stopwatchList as MutableList<Book>
     }
 
     fun addBook(stopwatch: Book) {
-        books.add(stopwatch)
-        notifyItemInserted(books.size - 1)
+        books.value?.add(stopwatch)
     }
 
     fun deleteBook(position: Int) {
         if (position >= 0) {
-            books.removeAt(position)
-            listener.deleteItem(position)
+            books.value?.removeAt(position)
             notifyItemRemoved(position)
         }
     }
 
-    fun getBooks(): MutableList<Book> {
-        return books
+    fun getBooks(): MutableList<Book>? {
+        return books.value
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
         if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
-                Collections.swap(books, i, i + 1)
+                Collections.swap(books.value, i, i + 1)
             }
         } else {
             for (i in fromPosition downTo toPosition + 1) {
-                Collections.swap(books, i, i - 1)
+                Collections.swap(books.value, i, i - 1)
             }
         }
         notifyItemMoved(fromPosition, toPosition)

@@ -40,16 +40,16 @@ class RecyclerFragmentViewModel : ViewModel() {
 
     fun updateDatabase() {
         if (bookDao?.getAll()?.size == 0) {
-            bookAdapter.getBooks().forEach { bookDao?.insert(it) }
+            bookAdapter.getBooks()?.forEach { bookDao?.insert(it) }
         } else {
             bookDao?.getAll()?.forEach {
                 if (it != null) {
-                    if (!checkList(bookAdapter.getBooks(), it.id)) {
+                    if (bookAdapter.getBooks()?.let { it1 -> checkList(it1, it.id) } == false) {
                         bookDao?.delete(it)
                     }
                 }
             }
-            bookAdapter.getBooks().forEach { stopwatch ->
+            bookAdapter.getBooks()?.forEach { stopwatch ->
                 if (checkList(
                         bookDao?.getAll() as List<Book>,
                         stopwatch.id
@@ -81,6 +81,6 @@ class RecyclerFragmentViewModel : ViewModel() {
     }
 
     fun deleteItem(position: Int) {
-        bookDao?.delete(bookAdapter.getBooks()[position])
+        bookDao?.delete(bookAdapter.getBooks()?.get(position))
     }
 }
