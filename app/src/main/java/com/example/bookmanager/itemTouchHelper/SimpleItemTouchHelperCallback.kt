@@ -1,4 +1,4 @@
-package com.example.bookmanager
+package com.example.bookmanager.itemTouchHelper
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView

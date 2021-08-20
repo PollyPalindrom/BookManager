@@ -2,7 +2,10 @@ package com.example.bookmanager
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.bookmanager.bookFragment.BookFragment
 import com.example.bookmanager.databinding.ActivityMainBinding
+import com.example.bookmanager.recyclerFragment.RecyclerFragment
+import com.example.bookmanager.sortFragment.SortFragment
 
 
 class MainActivity : AppCompatActivity() {
@@ -20,6 +23,10 @@ class MainActivity : AppCompatActivity() {
         val recyclerFragment = RecyclerFragment()
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.container, recyclerFragment).commit()
+        binding.toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_baseline_list_24)
+        binding.toolbar.setOnClickListener {
+            openSortFragment()
+        }
     }
 
     fun openSortFragment() {
@@ -27,6 +34,10 @@ class MainActivity : AppCompatActivity() {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.container, sortFragment).commit()
         transaction.addToBackStack("fragment")
+        binding.toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_baseline_arrow_back_24)
+        binding.toolbar.setOnClickListener {
+            supportFragmentManager.popBackStack()
+        }
     }
 
     fun openBookFragment() {
@@ -34,5 +45,13 @@ class MainActivity : AppCompatActivity() {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.container, bookFragment).commit()
         transaction.addToBackStack("fragment")
+        binding.toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_baseline_arrow_back_24)
+        binding.toolbar.setOnClickListener {
+            supportFragmentManager.popBackStack()
+        }
+    }
+
+    fun getBinding():ActivityMainBinding{
+        return binding
     }
 }

@@ -1,4 +1,4 @@
-package com.example.bookmanager
+package com.example.bookmanager.recyclerFragment
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -7,6 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.room.Room
+import com.example.bookmanager.BookListener
+import com.example.bookmanager.R
+import com.example.bookmanager.itemTouchHelper.SimpleItemTouchHelperCallback
+import com.example.bookmanager.database.AppDatabase
+import com.example.bookmanager.database.Book
+import com.example.bookmanager.database.BookDao
+import com.example.bookmanager.recycler.BookAdapter
 
 class RecyclerFragmentViewModel : ViewModel() {
     lateinit var bookAdapter: BookAdapter

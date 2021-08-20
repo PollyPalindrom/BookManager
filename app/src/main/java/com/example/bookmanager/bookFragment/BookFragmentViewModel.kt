@@ -1,9 +1,13 @@
-package com.example.bookmanager
+package com.example.bookmanager.bookFragment
 
 import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.room.Room
+import com.example.bookmanager.MainActivity
+import com.example.bookmanager.database.AppDatabase
+import com.example.bookmanager.database.Book
+import com.example.bookmanager.database.BookDao
 
 class BookFragmentViewModel : ViewModel() {
 

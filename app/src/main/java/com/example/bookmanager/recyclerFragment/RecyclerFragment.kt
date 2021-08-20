@@ -1,4 +1,4 @@
-package com.example.bookmanager
+package com.example.bookmanager.recyclerFragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +9,9 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.bookmanager.BookListener
+import com.example.bookmanager.MainActivity
+import com.example.bookmanager.R
 import com.example.bookmanager.databinding.FragmentRecyclerBinding
 
 class RecyclerFragment : Fragment(), BookListener {
@@ -37,9 +40,6 @@ class RecyclerFragment : Fragment(), BookListener {
         binding.addNewStopwatchButton.setOnClickListener {
             mainActivity.openBookFragment()
         }
-        binding.toolbar.setOnClickListener {
-            mainActivity.openSortFragment()
-        }
         mainActivity.onBackPressedDispatcher.addCallback(mainActivity,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
@@ -52,6 +52,11 @@ class RecyclerFragment : Fragment(), BookListener {
     override fun onResume() {
         super.onResume()
         context?.let { viewModel.chooseSort(it, resources) }
+        val mainActivity = activity as MainActivity
+        mainActivity.getBinding().toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_baseline_list_24)
+        mainActivity.getBinding().toolbar.setOnClickListener {
+            mainActivity.openSortFragment()
+        }
     }
 
     override fun onStop() {

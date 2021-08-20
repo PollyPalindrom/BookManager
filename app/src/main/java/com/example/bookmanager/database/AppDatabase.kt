@@ -1,4 +1,4 @@
-package com.example.bookmanager
+package com.example.bookmanager.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

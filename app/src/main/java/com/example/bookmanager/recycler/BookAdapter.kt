@@ -1,9 +1,12 @@
-package com.example.bookmanager
+package com.example.bookmanager.recycler
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
+import com.example.bookmanager.BookListener
+import com.example.bookmanager.itemTouchHelper.ItemTouchHelperAdapter
+import com.example.bookmanager.database.Book
 import com.example.bookmanager.databinding.ItemBinding
 import java.util.*
 

@@ -1,4 +1,4 @@
-package com.example.bookmanager
+package com.example.bookmanager.bookFragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.bookmanager.MainActivity
 import com.example.bookmanager.databinding.FragmentBookBinding
 
 class BookFragment : Fragment() {

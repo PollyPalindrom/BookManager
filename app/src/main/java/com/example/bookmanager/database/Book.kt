@@ -1,4 +1,4 @@
-package com.example.bookmanager
+package com.example.bookmanager.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

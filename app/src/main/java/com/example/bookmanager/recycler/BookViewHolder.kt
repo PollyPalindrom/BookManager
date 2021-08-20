@@ -1,7 +1,8 @@
-package com.example.bookmanager
+package com.example.bookmanager.recycler
 
 import androidx.lifecycle.LifecycleObserver
 import androidx.recyclerview.widget.RecyclerView
+import com.example.bookmanager.database.Book
 import com.example.bookmanager.databinding.ItemBinding
 
 class BookViewHolder(

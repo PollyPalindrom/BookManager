@@ -1,6 +1,7 @@
-package com.example.bookmanager
+package com.example.bookmanager.database
 
 import androidx.room.*
+import com.example.bookmanager.database.Book
 
 @Dao
 interface BookDao {
