@@ -10,12 +10,12 @@ import com.example.bookmanager.sortFragment.SortFragment
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    private var binding: ActivityMainBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(binding?.root)
         if (savedInstanceState == null) openRecyclerFragment()
     }
 
@@ -23,8 +23,8 @@ class MainActivity : AppCompatActivity() {
         val recyclerFragment = RecyclerFragment()
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.container, recyclerFragment).commit()
-        binding.toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_baseline_list_24)
-        binding.toolbar.setOnClickListener {
+        binding?.toolbar?.navigationIcon = resources.getDrawable(R.drawable.ic_baseline_list_24)
+        binding?.toolbar?.setOnClickListener {
             openSortFragment()
         }
     }
@@ -34,8 +34,9 @@ class MainActivity : AppCompatActivity() {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.container, sortFragment).commit()
         transaction.addToBackStack("fragment")
-        binding.toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_baseline_arrow_back_24)
-        binding.toolbar.setOnClickListener {
+        binding?.toolbar?.navigationIcon =
+            resources.getDrawable(R.drawable.ic_baseline_arrow_back_24)
+        binding?.toolbar?.setOnClickListener {
             supportFragmentManager.popBackStack()
         }
     }
@@ -45,13 +46,19 @@ class MainActivity : AppCompatActivity() {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.container, bookFragment).commit()
         transaction.addToBackStack("fragment")
-        binding.toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_baseline_arrow_back_24)
-        binding.toolbar.setOnClickListener {
+        binding?.toolbar?.navigationIcon =
+            resources.getDrawable(R.drawable.ic_baseline_arrow_back_24)
+        binding?.toolbar?.setOnClickListener {
             supportFragmentManager.popBackStack()
         }
     }
 
-    fun getBinding():ActivityMainBinding{
+    fun getBinding(): ActivityMainBinding? {
         return binding
+    }
+
+    override fun onDestroy() {
+        binding = null
+        super.onDestroy()
     }
 }

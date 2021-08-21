@@ -17,11 +17,11 @@ class BookFragmentViewModel : ViewModel() {
     fun addButtonHandler(
         context: Context,
         activity: MainActivity,
-        title: String,
-        author: String,
-        year: String
+        title: String?,
+        author: String?,
+        year: String?
     ) {
-        if (title != "" && author != "" && year != "") {
+        if (title != "" && author != "" && year != "" && title != null && author != null && year != null) {
             database =
                 context.let {
                     Room.databaseBuilder(it, AppDatabase::class.java, "stopwatcheswithnames")

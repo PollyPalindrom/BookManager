@@ -16,28 +16,28 @@ import com.example.bookmanager.databinding.FragmentRecyclerBinding
 
 class RecyclerFragment : Fragment(), BookListener {
 
-    private lateinit var viewModel: RecyclerFragmentViewModel
-    private lateinit var binding: FragmentRecyclerBinding
+    private var viewModel: RecyclerFragmentViewModel? = null
+    private var binding: FragmentRecyclerBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         binding = FragmentRecyclerBinding.inflate(inflater)
         viewModel = ViewModelProvider(this).get(RecyclerFragmentViewModel::class.java)
-        viewModel.initBookAdapter(this)
-        return binding.root
+        viewModel?.initBookAdapter(this)
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val mainActivity = activity as MainActivity
         loadListFromDatabase()
-        binding.recycler.apply {
+        binding?.recycler?.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = viewModel.bookAdapter
+            adapter = viewModel?.bookAdapter
         }
-        binding.addNewStopwatchButton.setOnClickListener {
+        binding?.addNewStopwatchButton?.setOnClickListener {
             mainActivity.openBookFragment()
         }
         mainActivity.onBackPressedDispatcher.addCallback(mainActivity,
@@ -46,29 +46,34 @@ class RecyclerFragment : Fragment(), BookListener {
                     ActivityCompat.finishAffinity(activity as MainActivity)
                 }
             })
-        viewModel.touchHelper.attachToRecyclerView(binding.recycler)
+        viewModel?.touchHelper?.attachToRecyclerView(binding?.recycler)
     }
 
     override fun onResume() {
         super.onResume()
-        context?.let { viewModel.chooseSort(it, resources) }
+        context?.let { viewModel?.chooseSort(it, resources) }
         val mainActivity = activity as MainActivity
-        mainActivity.getBinding().toolbar.navigationIcon = resources.getDrawable(R.drawable.ic_baseline_list_24)
-        mainActivity.getBinding().toolbar.setOnClickListener {
+        mainActivity.getBinding()?.toolbar?.navigationIcon = resources.getDrawable(R.drawable.ic_baseline_list_24)
+        mainActivity.getBinding()?.toolbar?.setOnClickListener {
             mainActivity.openSortFragment()
         }
     }
 
     override fun onStop() {
         super.onStop()
-        viewModel.updateDatabase()
+        viewModel?.updateDatabase()
     }
 
     override fun loadListFromDatabase() {
-        context?.let { viewModel.loadListFromDatabase(it) }
+        context?.let { viewModel?.loadListFromDatabase(it) }
     }
 
     override fun deleteItem(position: Int) {
-        viewModel.deleteItem(position)
+        viewModel?.deleteItem(position)
+    }
+
+    override fun onDestroy() {
+        binding = null
+        super.onDestroy()
     }
 }

@@ -12,29 +12,29 @@ import com.example.bookmanager.databinding.FragmentBookBinding
 
 class BookFragment : Fragment() {
 
-    private lateinit var binding: FragmentBookBinding
-    private lateinit var viewModel: BookFragmentViewModel
+    private var binding: FragmentBookBinding? = null
+    private var viewModel: BookFragmentViewModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         binding = FragmentBookBinding.inflate(inflater)
         viewModel = ViewModelProvider(this).get(BookFragmentViewModel::class.java)
-        return binding.root
+        return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val mainActivity = activity as MainActivity
-        binding.addButton.setOnClickListener {
+        binding?.addButton?.setOnClickListener {
             context?.let { it1 ->
-                viewModel.addButtonHandler(
+                viewModel?.addButtonHandler(
                     it1,
                     activity as MainActivity,
-                    binding.title.text.toString(),
-                    binding.author.text.toString(),
-                    binding.year.text.toString()
+                    binding?.title?.text.toString(),
+                    binding?.author?.text.toString(),
+                    binding?.year?.text.toString()
                 )
             }
         }
@@ -46,4 +46,8 @@ class BookFragment : Fragment() {
             })
     }
 
+    override fun onDestroy() {
+        binding = null
+        super.onDestroy()
+    }
 }

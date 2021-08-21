@@ -34,15 +34,15 @@ class BookAdapter(private val listener: BookListener) : RecyclerView.Adapter<Boo
     }
 
     fun sortByTitle() {
-        books.value?.sortedBy { it.title }
+        books.value?.sortBy { it.title }
     }
 
     fun sortByAuthor() {
-        books.value?.sortedBy { it.author }
+        books.value?.sortBy { it.author }
     }
 
     fun sortByYear() {
-        books.value?.sortedBy { it.year }
+        books.value?.sortBy { it.year }
     }
 
     fun setBooks(stopwatchList: List<Book>) {
