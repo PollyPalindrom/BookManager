@@ -1,6 +1,7 @@
 package com.example.bookmanager
 
+import com.example.bookmanager.database.Book
+
 interface BookListener {
-    fun loadListFromDatabase()
-    fun deleteItem(position: Int)
+    fun deleteItem(book: Book)
 }

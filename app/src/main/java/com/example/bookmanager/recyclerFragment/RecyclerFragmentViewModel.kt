@@ -3,92 +3,57 @@ package com.example.bookmanager.recyclerFragment
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Resources
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.room.Room
-import com.example.bookmanager.BookListener
 import com.example.bookmanager.R
-import com.example.bookmanager.itemTouchHelper.SimpleItemTouchHelperCallback
 import com.example.bookmanager.database.AppDatabase
 import com.example.bookmanager.database.Book
 import com.example.bookmanager.database.BookDao
-import com.example.bookmanager.recycler.BookAdapter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
 
 class RecyclerFragmentViewModel : ViewModel() {
 
-    var bookAdapter: BookAdapter? = null
-    var bookDao: BookDao? = null
-    var touchHelper: ItemTouchHelper? = null
-    private var database: AppDatabase? = null
 
-    fun initBookAdapter(listener: BookListener) {
-        bookAdapter = BookAdapter(listener)
-        touchHelper = ItemTouchHelper(
-            SimpleItemTouchHelperCallback(
-                bookAdapter!!
-            )
-        )
-    }
+    val books = MutableLiveData<List<Book>>()
+    lateinit var dao: BookDao
 
     fun chooseSort(context: Context, resources: Resources) {
-        bookAdapter?.setBooks(bookDao?.getAll() as List<Book>)
         val prefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         val option = prefs.getString("list_preference", "не установлено")
-        if (option == resources.getString(R.string.first_option)) {
-            bookAdapter?.sortByTitle()
-        }
-        if (option == resources.getString(R.string.second_option)) {
-            bookAdapter?.sortByAuthor()
-        }
-        if (option == resources.getString(R.string.third_option)) {
-            bookAdapter?.sortByYear()
-        }
-    }
 
-    fun updateDatabase() {
-        if (bookDao?.getAll()?.size == 0) {
-            bookAdapter?.getBooks()?.forEach { bookDao?.insert(it) }
-        } else {
-            bookDao?.getAll()?.forEach {
-                if (it != null) {
-                    if (bookAdapter?.getBooks()?.let { it1 -> checkList(it1, it.id) } == false) {
-                        bookDao?.delete(it)
-                    }
-                }
+        //TODO: fix strings and shared preferences
+        when (option) {
+            resources.getString(R.string.first_option) -> {
+                books.postValue(books.value?.sortedBy { it.title })
             }
-            bookAdapter?.getBooks()?.forEach { stopwatch ->
-                if (checkList(
-                        bookDao?.getAll() as List<Book>,
-                        stopwatch.id
-                    )
-                ) bookDao?.update(stopwatch)
-                else bookDao?.insert(stopwatch)
+            resources.getString(R.string.second_option) -> {
+                books.postValue(books.value?.sortedBy { it.author })
             }
-
+            resources.getString(R.string.third_option) -> {
+                books.postValue(books.value?.sortedBy { it.year })
+            }
         }
-    }
-
-    private fun checkList(list: List<Book>, id: Int): Boolean {
-        var temp = false
-        list.forEach { if (it.id == id) temp = true }
-        return temp
     }
 
     fun loadListFromDatabase(context: Context) {
-        database =
-            context?.let {
-                Room.databaseBuilder(it, AppDatabase::class.java, "stopwatcheswithnames")
-                    .allowMainThreadQueries()
-                    .build()
-            }
-        bookDao = database?.stopwatchDao()
-        if (bookDao?.getAll()?.size != 0) {
-            bookAdapter?.setBooks(bookDao?.getAll() as List<Book>)
+        viewModelScope.launch(Dispatchers.IO) {
+            //TODO: move to repository
+            dao = AppDatabase.getInstance(context).stopwatchDao()
+            val bookssss = dao.getAll()
+            books.postValue(bookssss)
         }
     }
 
     fun deleteItem(position: Int) {
-        bookDao?.delete(bookAdapter?.getBooks()?.get(position))
+        val book = books.value?.get(position)
+        viewModelScope.launch(Dispatchers.IO) {
+            dao.delete(book)
+            books.postValue(dao.getAll())
+
+        }
     }
 }

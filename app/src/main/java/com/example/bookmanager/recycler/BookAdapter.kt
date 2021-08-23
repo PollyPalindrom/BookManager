@@ -10,10 +10,9 @@ import com.example.bookmanager.database.Book
 import com.example.bookmanager.databinding.ItemBinding
 import java.util.*
 
-class BookAdapter(private val listener: BookListener) : RecyclerView.Adapter<BookViewHolder>(),
-    ItemTouchHelperAdapter {
+class BookAdapter : RecyclerView.Adapter<BookViewHolder>() {
 
-    private var books = MutableLiveData<MutableList<Book>>()
+    private var books = listOf<Book>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -26,59 +25,16 @@ class BookAdapter(private val listener: BookListener) : RecyclerView.Adapter<Boo
     }
 
     private fun getItem(position: Int): Book? {
-        return books.value?.get(position)
+        return books[position]
     }
 
     override fun getItemCount(): Int {
-        return books.value?.size!!
-    }
-
-    fun sortByTitle() {
-        books.value?.sortBy { it.title }
-    }
-
-    fun sortByAuthor() {
-        books.value?.sortBy { it.author }
-    }
-
-    fun sortByYear() {
-        books.value?.sortBy { it.year }
+        return books.size
     }
 
     fun setBooks(stopwatchList: List<Book>) {
-        books.value = stopwatchList as MutableList<Book>
+        books = stopwatchList
+        notifyDataSetChanged()
     }
 
-    fun addBook(stopwatch: Book) {
-        books.value?.add(stopwatch)
-    }
-
-    fun deleteBook(position: Int) {
-        if (position >= 0) {
-            books.value?.removeAt(position)
-            notifyItemRemoved(position)
-        }
-    }
-
-    fun getBooks(): MutableList<Book>? {
-        return books.value
-    }
-
-    override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
-        if (fromPosition < toPosition) {
-            for (i in fromPosition until toPosition) {
-                Collections.swap(books.value, i, i + 1)
-            }
-        } else {
-            for (i in fromPosition downTo toPosition + 1) {
-                Collections.swap(books.value, i, i - 1)
-            }
-        }
-        notifyItemMoved(fromPosition, toPosition)
-        return true
-    }
-
-    override fun onItemDismiss(position: Int) {
-        deleteBook(position)
-    }
 }

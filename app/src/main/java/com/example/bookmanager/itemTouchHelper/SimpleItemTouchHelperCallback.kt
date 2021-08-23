@@ -2,8 +2,9 @@ package com.example.bookmanager.itemTouchHelper
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.example.bookmanager.recyclerFragment.RecyclerFragmentViewModel
 
-class SimpleItemTouchHelperCallback(private val bookAdapter: ItemTouchHelperAdapter) :
+class SimpleItemTouchHelperCallback(private val viewModel: RecyclerFragmentViewModel) :
     ItemTouchHelper.Callback() {
     override fun isLongPressDragEnabled(): Boolean {
         return true
@@ -17,20 +18,20 @@ class SimpleItemTouchHelperCallback(private val bookAdapter: ItemTouchHelperAdap
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder
     ): Int {
-        val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
         val swipeFlags = ItemTouchHelper.START or ItemTouchHelper.END
-        return makeMovementFlags(dragFlags, swipeFlags)
+        return makeMovementFlags(0, swipeFlags)
     }
 
     override fun onMove(
         recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
         target: RecyclerView.ViewHolder
     ): Boolean {
-        bookAdapter.onItemMove(viewHolder.adapterPosition, target.adapterPosition)
+        //bookAdapter.onItemMove(viewHolder.adapterPosition, target.adapterPosition)
         return true
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        bookAdapter.onItemDismiss(viewHolder.adapterPosition)
+        //bookAdapter.onItemDismiss(viewHolder.adapterPosition)
+        viewModel.deleteItem(viewHolder.adapterPosition)
     }
 }
