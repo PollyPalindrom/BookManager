@@ -1,5 +1,6 @@
 package com.example.bookmanager
 
+import android.app.Application
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.bookmanager.bookFragment.BookFragment
@@ -52,7 +53,9 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.popBackStack()
         }
     }
-
+    fun getMyApplication(): Application? {
+        return application
+    }
     fun getBinding(): ActivityMainBinding? {
         return binding
     }

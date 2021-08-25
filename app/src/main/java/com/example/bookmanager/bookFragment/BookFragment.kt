@@ -6,21 +6,24 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
+import com.example.bookmanager.BooksApplication
 import com.example.bookmanager.MainActivity
+import com.example.bookmanager.viewModelFactory.ViewModelFactory
 import com.example.bookmanager.databinding.FragmentBookBinding
 
 class BookFragment : Fragment() {
 
     private var binding: FragmentBookBinding? = null
-    private var viewModel: BookFragmentViewModel? = null
+    private val viewModel: BookFragmentViewModel by viewModels {
+        ViewModelFactory(((activity as MainActivity).getMyApplication() as BooksApplication).repository)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentBookBinding.inflate(inflater)
-        viewModel = ViewModelProvider(this).get(BookFragmentViewModel::class.java)
         return binding?.root
     }
 
@@ -28,15 +31,14 @@ class BookFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val mainActivity = activity as MainActivity
         binding?.addButton?.setOnClickListener {
-            context?.let { it1 ->
-                viewModel?.addButtonHandler(
-                    it1,
-                    activity as MainActivity,
-                    binding?.title?.text.toString(),
-                    binding?.author?.text.toString(),
-                    binding?.year?.text.toString()
-                )
-            }
+
+            viewModel.addButtonHandler(
+                activity as MainActivity,
+                binding?.title?.text.toString(),
+                binding?.author?.text.toString(),
+                binding?.year?.text.toString()
+            )
+
         }
         mainActivity.onBackPressedDispatcher.addCallback(mainActivity,
             object : OnBackPressedCallback(true) {

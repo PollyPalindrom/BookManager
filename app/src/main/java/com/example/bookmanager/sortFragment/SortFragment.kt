@@ -1,9 +1,13 @@
 package com.example.bookmanager.sortFragment
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceManager
 import com.example.bookmanager.MainActivity
 import com.example.bookmanager.R
 
@@ -16,6 +20,8 @@ class SortFragment : PreferenceFragmentCompat() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val mainActivity = activity as MainActivity
+        val dataPref = findPreference<ListPreference>("list_preference")
+        dataPref?.setValueIndex(3)
         mainActivity.onBackPressedDispatcher.addCallback(
             mainActivity,
             object : OnBackPressedCallback(true) {

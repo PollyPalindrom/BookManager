@@ -21,7 +21,6 @@ abstract class AppDatabase : RoomDatabase() {
             if (database == null) {
                 database =
                     Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
-                        .allowMainThreadQueries()
                         .build()
             }
             return database!!

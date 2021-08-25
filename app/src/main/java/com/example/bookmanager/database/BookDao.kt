@@ -1,11 +1,12 @@
 package com.example.bookmanager.database
 
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BookDao {
     @Query("SELECT * FROM book")
-    fun getAll(): List<Book>
+    fun getAll(): Flow<MutableList<Book>>
 
     @Insert(entity = Book::class, onConflict = OnConflictStrategy.REPLACE)
     fun insert(stopwatches: Book?)

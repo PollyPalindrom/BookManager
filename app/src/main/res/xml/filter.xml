@@ -2,11 +2,11 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
     <ListPreference
-        android:defaultValue="1"
         android:entries="@array/options"
-        android:entryValues="@array/options"
+        android:entryValues="@array/options_values"
         android:key="list_preference"
-        android:title="Sort"
-        android:icon="@drawable/ic_baseline_list_24" />
+        android:icon="@drawable/ic_baseline_list_24"
+        android:title="Sort by" />
 </PreferenceScreen>
