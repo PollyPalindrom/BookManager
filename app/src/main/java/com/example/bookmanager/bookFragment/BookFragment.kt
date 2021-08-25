@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.bookmanager.BooksApplication
 import com.example.bookmanager.MainActivity
-import com.example.bookmanager.viewModelFactory.ViewModelFactory
 import com.example.bookmanager.databinding.FragmentBookBinding
+import com.example.bookmanager.viewModelFactory.ViewModelFactory
 
 class BookFragment : Fragment() {
 

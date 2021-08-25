@@ -53,9 +53,11 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.popBackStack()
         }
     }
+
     fun getMyApplication(): Application? {
         return application
     }
+
     fun getBinding(): ActivityMainBinding? {
         return binding
     }

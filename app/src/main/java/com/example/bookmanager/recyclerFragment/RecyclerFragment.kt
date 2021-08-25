@@ -12,14 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bookmanager.BooksApplication
 import com.example.bookmanager.MainActivity
 import com.example.bookmanager.R
-import com.example.bookmanager.viewModelFactory.ViewModelFactory
 import com.example.bookmanager.databinding.FragmentRecyclerBinding
 import com.example.bookmanager.itemTouchHelper.SimpleItemTouchHelperCallback
 import com.example.bookmanager.recycler.BookAdapter
+import com.example.bookmanager.viewModelFactory.ViewModelFactory
 
 class RecyclerFragment : Fragment() {
 
-    private val viewModel:RecyclerFragmentViewModel by viewModels {
+    private val viewModel: RecyclerFragmentViewModel by viewModels {
         ViewModelFactory(((activity as MainActivity).getMyApplication() as BooksApplication).repository)
     }
     private var binding: FragmentRecyclerBinding? = null
@@ -63,7 +63,7 @@ class RecyclerFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.chooseSort(requireContext(),resources)
+        viewModel.chooseSort(requireContext())
         val mainActivity = activity as MainActivity
         mainActivity.getBinding()?.toolbar?.navigationIcon =
             resources.getDrawable(R.drawable.ic_baseline_list_24)
