@@ -15,4 +15,11 @@ class BookRepository(private val bookDao: BookDao) {
     fun delete(book: Book) {
         bookDao.delete(book)
     }
+
+    fun update(book: Book) {
+        bookDao.update(book)
+    }
+    fun getBook(id:Int):Book{
+        return bookDao.getBook(id)
+    }
 }

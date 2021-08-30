@@ -42,8 +42,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun openBookFragment() {
-        val bookFragment = BookFragment()
+    fun openBookFragment(command:String, id:Int) {
+        val bookFragment = BookFragment.newInstance(command, id)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.container, bookFragment).commit()
         transaction.addToBackStack("fragment")

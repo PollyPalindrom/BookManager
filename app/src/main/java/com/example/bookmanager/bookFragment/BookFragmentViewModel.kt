@@ -5,27 +5,54 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bookmanager.MainActivity
 import com.example.bookmanager.database.Book
+import com.example.bookmanager.databinding.FragmentBookBinding
 import com.example.bookmanager.repository.BookRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class BookFragmentViewModel(private val repository: BookRepository) : ViewModel() {
 
+    fun getInfo(id:Int, binding: FragmentBookBinding) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val book = id.let { repository.getBook(it) }
+            binding.title.setText(book.title)
+            binding.author.setText(book.author)
+            binding.year.setText(book.year)
+        }
+    }
+
     fun addButtonHandler(
         activity: MainActivity,
         title: String?,
         author: String?,
-        year: String?
+        year: String?,
+        command: String?,
+        id: Int?
     ) {
         if (title != "" && author != "" && year != "" && title != null && author != null && year != null) {
-            viewModelScope.launch(Dispatchers.IO) {
-                repository.insert(
-                    Book(
-                        title,
-                        author,
-                        year
+            if (command == "add")
+                viewModelScope.launch(Dispatchers.IO) {
+                    repository.insert(
+                        Book(
+                            title,
+                            author,
+                            year
+                        )
                     )
-                )
+                }
+            else {
+                if (id != 0)
+                    viewModelScope.launch(Dispatchers.IO) {
+                        val book = id?.let { repository.getBook(it) }
+                        book?.year = year
+                        book?.author = author
+                        book?.title = title
+                        if (book != null) {
+                            repository.update(
+                                book
+                            )
+                        }
+                    }
             }
             activity.supportFragmentManager.popBackStack()
         } else Toast.makeText(

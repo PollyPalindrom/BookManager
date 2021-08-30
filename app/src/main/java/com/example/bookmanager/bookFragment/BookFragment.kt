@@ -30,13 +30,18 @@ class BookFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val mainActivity = activity as MainActivity
+        binding?.addButton?.text = arguments?.getString(COMMAND).toString()
+        if(binding?.addButton?.text == "edit"){
+            arguments?.getInt(BOOK_ID)?.let { viewModel.getInfo(it, binding!!) }
+        }
         binding?.addButton?.setOnClickListener {
-
             viewModel.addButtonHandler(
                 activity as MainActivity,
                 binding?.title?.text.toString(),
                 binding?.author?.text.toString(),
-                binding?.year?.text.toString()
+                binding?.year?.text.toString(),
+                binding?.addButton?.text.toString(),
+                arguments?.getInt(BOOK_ID)
             )
 
         }
@@ -51,5 +56,21 @@ class BookFragment : Fragment() {
     override fun onDestroy() {
         binding = null
         super.onDestroy()
+    }
+
+    companion object{
+        @JvmStatic
+        fun newInstance(command: String, id:Int): BookFragment {
+            val fragment = BookFragment()
+            val args = Bundle()
+            args.putString(COMMAND, command)
+            args.putInt(BOOK_ID,id)
+            fragment.arguments = args
+            return fragment
+
+        }
+
+        private const val COMMAND = "COMMAND"
+        private const val BOOK_ID = "BOOK_ID"
     }
 }

@@ -17,8 +17,6 @@ class SortFragment : PreferenceFragmentCompat() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val mainActivity = activity as MainActivity
-        val dataPref = findPreference<ListPreference>("list_preference")
-        dataPref?.setValueIndex(3)
         mainActivity.onBackPressedDispatcher.addCallback(
             mainActivity,
             object : OnBackPressedCallback(true) {

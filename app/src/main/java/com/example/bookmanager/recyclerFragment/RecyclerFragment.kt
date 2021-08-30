@@ -1,5 +1,6 @@
 package com.example.bookmanager.recyclerFragment
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bookmanager.BooksApplication
+import com.example.bookmanager.Listener
 import com.example.bookmanager.MainActivity
 import com.example.bookmanager.R
 import com.example.bookmanager.databinding.FragmentRecyclerBinding
@@ -17,13 +19,13 @@ import com.example.bookmanager.itemTouchHelper.SimpleItemTouchHelperCallback
 import com.example.bookmanager.recycler.BookAdapter
 import com.example.bookmanager.viewModelFactory.ViewModelFactory
 
-class RecyclerFragment : Fragment() {
+class RecyclerFragment : Fragment(), Listener {
 
     private val viewModel: RecyclerFragmentViewModel by viewModels {
         ViewModelFactory(((activity as MainActivity).getMyApplication() as BooksApplication).repository)
     }
     private var binding: FragmentRecyclerBinding? = null
-    val bookAdapter = BookAdapter()
+    val bookAdapter = BookAdapter(this)
     lateinit var touchHelper: ItemTouchHelper
 
     override fun onCreateView(
@@ -43,6 +45,7 @@ class RecyclerFragment : Fragment() {
         )
         viewModel.books.observe(viewLifecycleOwner) {
             bookAdapter.submitList(it)
+            viewModel.chooseSort(requireContext())
         }
         val mainActivity = activity as MainActivity
         binding?.recycler?.apply {
@@ -50,7 +53,7 @@ class RecyclerFragment : Fragment() {
             adapter = bookAdapter
         }
         binding?.addNewStopwatchButton?.setOnClickListener {
-            mainActivity.openBookFragment()
+            mainActivity.openBookFragment("add",0)
         }
         touchHelper.attachToRecyclerView(binding?.recycler)
         mainActivity.onBackPressedDispatcher.addCallback(mainActivity,
@@ -63,7 +66,6 @@ class RecyclerFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.chooseSort(requireContext())
         val mainActivity = activity as MainActivity
         mainActivity.getBinding()?.toolbar?.navigationIcon =
             resources.getDrawable(R.drawable.ic_baseline_list_24)
@@ -75,5 +77,10 @@ class RecyclerFragment : Fragment() {
     override fun onDestroy() {
         binding = null
         super.onDestroy()
+    }
+
+    override fun openBookFragmentForEdit(id:Int) {
+        val mainActivity = activity as MainActivity
+        mainActivity.openBookFragment("edit",id)
     }
 }

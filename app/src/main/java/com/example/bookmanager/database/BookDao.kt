@@ -16,4 +16,7 @@ interface BookDao {
 
     @Delete
     fun delete(stopwatches: Book?)
+
+    @Query("SELECT * FROM book WHERE id = :id")
+    fun getBook(id:Int):Book
 }
