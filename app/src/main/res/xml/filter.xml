@@ -9,4 +9,10 @@
         android:key="list_preference"
         android:icon="@drawable/ic_baseline_list_24"
         android:title="Sort by" />
+
+    <SwitchPreference
+        android:key="room_or_cursor"
+        android:title="Room"
+        android:defaultValue="true"
+        />
 </PreferenceScreen>

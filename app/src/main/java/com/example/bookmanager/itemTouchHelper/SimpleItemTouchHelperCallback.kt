@@ -1,10 +1,11 @@
 package com.example.bookmanager.itemTouchHelper
 
+import android.content.Context
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bookmanager.recyclerFragment.RecyclerFragmentViewModel
 
-class SimpleItemTouchHelperCallback(private val viewModel: RecyclerFragmentViewModel) :
+class SimpleItemTouchHelperCallback(private val viewModel: RecyclerFragmentViewModel, private val context: Context) :
     ItemTouchHelper.Callback() {
     override fun isLongPressDragEnabled(): Boolean {
         return true
@@ -32,6 +33,6 @@ class SimpleItemTouchHelperCallback(private val viewModel: RecyclerFragmentViewM
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         //bookAdapter.onItemDismiss(viewHolder.adapterPosition)
-        viewModel.deleteItem(viewHolder.adapterPosition)
+        viewModel.deleteItem(viewHolder.adapterPosition,context)
     }
 }

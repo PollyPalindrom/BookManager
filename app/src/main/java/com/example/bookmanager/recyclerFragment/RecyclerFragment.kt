@@ -40,7 +40,7 @@ class RecyclerFragment : Fragment(), Listener {
         super.onViewCreated(view, savedInstanceState)
         touchHelper = ItemTouchHelper(
             SimpleItemTouchHelperCallback(
-                viewModel
+                viewModel, requireContext()
             )
         )
         viewModel.books.observe(viewLifecycleOwner) {
@@ -66,7 +66,10 @@ class RecyclerFragment : Fragment(), Listener {
 
     override fun onResume() {
         super.onResume()
+        viewModel.chooseSubd(requireContext(), activity as MainActivity)
         val mainActivity = activity as MainActivity
+        bookAdapter.submitList(viewModel.books.value)
+        viewModel.chooseSort(requireContext())
         mainActivity.getBinding()?.toolbar?.navigationIcon =
             resources.getDrawable(R.drawable.ic_baseline_list_24)
         mainActivity.getBinding()?.toolbar?.setOnClickListener {

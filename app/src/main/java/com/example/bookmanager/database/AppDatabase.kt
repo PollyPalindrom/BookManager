@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-private const val DATABASE_NAME = "stopwatcheswithnames"
+private const val DATABASE_NAME = "books"
 
 
 @Database(entities = [Book::class], version = 1)

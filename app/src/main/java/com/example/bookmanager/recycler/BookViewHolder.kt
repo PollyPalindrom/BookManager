@@ -13,7 +13,7 @@ class BookViewHolder(
     fun bind(book: Book, listener: Listener) {
         binding.bookTitle.text = book.title
         binding.bookAuthor.text = book.author
-        binding.editYear.text = book.year
+        binding.editYear.text = book.year.toString()
         binding.editText.setOnClickListener {
             listener.openBookFragmentForEdit(book.id)
         }

@@ -66,4 +66,7 @@ class MainActivity : AppCompatActivity() {
         binding = null
         super.onDestroy()
     }
+    fun changeSubtitle(subtitle:String){
+        binding?.toolbar?.subtitle = subtitle
+    }
 }

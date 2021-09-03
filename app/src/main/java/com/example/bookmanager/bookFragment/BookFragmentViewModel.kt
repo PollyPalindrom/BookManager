@@ -17,7 +17,7 @@ class BookFragmentViewModel(private val repository: BookRepository) : ViewModel(
             val book = id.let { repository.getBook(it) }
             binding.title.setText(book.title)
             binding.author.setText(book.author)
-            binding.year.setText(book.year)
+            binding.year.setText(book.year.toString())
         }
     }
 
@@ -29,14 +29,18 @@ class BookFragmentViewModel(private val repository: BookRepository) : ViewModel(
         command: String?,
         id: Int?
     ) {
-        if (title != "" && author != "" && year != "" && title != null && author != null && year != null) {
+        if (title != "" && author != "" && year != "" && title != null && author != null && year?.let {
+                checkNumber(
+                    it
+                )
+            } == true) {
             if (command == "add")
                 viewModelScope.launch(Dispatchers.IO) {
                     repository.insert(
                         Book(
                             title,
                             author,
-                            year
+                            year.toLong()
                         )
                     )
                 }
@@ -44,7 +48,7 @@ class BookFragmentViewModel(private val repository: BookRepository) : ViewModel(
                 if (id != 0)
                     viewModelScope.launch(Dispatchers.IO) {
                         val book = id?.let { repository.getBook(it) }
-                        book?.year = year
+                        book?.year = year.toLong()
                         book?.author = author
                         book?.title = title
                         if (book != null) {
@@ -60,5 +64,24 @@ class BookFragmentViewModel(private val repository: BookRepository) : ViewModel(
             "Wrong input :3",
             Toast.LENGTH_LONG
         ).show()
+    }
+
+    private fun checkNumber(numberToCompare: String): Boolean {
+        var sum: Long = 0
+        try {
+            numberToCompare.toLong()
+        } catch (e: NumberFormatException) {
+            return false
+        }
+        if (numberToCompare == "") return false
+        if (numberToCompare.toLong() <= Integer.MAX_VALUE.toLong()) return true
+        if (numberToCompare.toLong() > Integer.MAX_VALUE) return false
+        else {
+            for (i in numberToCompare.indices) {
+                sum = sum * 10 + numberToCompare[i].toInt()
+                if (sum > Integer.MAX_VALUE) return false
+            }
+            return true
+        }
     }
 }
