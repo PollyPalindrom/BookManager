@@ -19,25 +19,21 @@ class BookRepository(
     fun insert(book: Book) {
         if (state) bookDao.insert(book)
         else insertBook(book)
-        println(state)
     }
 
     fun delete(book: Book) {
         if (state) bookDao.delete(book)
         else deleteBook(book)
-        println(state)
     }
 
     fun update(book: Book) {
         if (state) bookDao.update(book)
         else updateBook(book)
-        println(state)
     }
 
     fun getBook(id: Int): Book {
         return if (state) bookDao.getBook(id)
         else getBookCursor(id)
-        println(state)
     }
 
     private fun insertBook(book: Book) {
@@ -58,6 +54,5 @@ class BookRepository(
 
     fun getAll(): List<Book> {
         return cursorDatabase.getAll()
-        println(state)
     }
 }

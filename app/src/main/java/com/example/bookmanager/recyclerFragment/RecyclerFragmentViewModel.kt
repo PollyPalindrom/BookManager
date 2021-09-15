@@ -56,9 +56,7 @@ class RecyclerFragmentViewModel(private val repository: BookRepository) : ViewMo
                 viewModelScope.launch(Dispatchers.IO) {
                     books.postValue(repository.getAll() as MutableList<Book>?)
                 }
-                println("false")
             }
-            else -> println("true")
         }
 
     }
