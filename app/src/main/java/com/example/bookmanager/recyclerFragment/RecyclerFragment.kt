@@ -1,6 +1,5 @@
 package com.example.bookmanager.recyclerFragment
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +7,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bookmanager.BooksApplication
@@ -32,6 +32,14 @@ class RecyclerFragment : Fragment(), Listener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        viewModel.setState(
+            PreferenceManager.getDefaultSharedPreferences(context)
+                .getBoolean("room_or_cursor", true)
+        )
+        if (PreferenceManager.getDefaultSharedPreferences(context)
+                .getBoolean("room_or_cursor", true)
+        ) (activity as MainActivity).changeSubtitle("Room")
+        else (activity as MainActivity).changeSubtitle("Cursor")
         binding = FragmentRecyclerBinding.inflate(inflater)
         return binding?.root
     }
@@ -53,7 +61,7 @@ class RecyclerFragment : Fragment(), Listener {
             adapter = bookAdapter
         }
         binding?.addNewStopwatchButton?.setOnClickListener {
-            mainActivity.openBookFragment("add",0)
+            mainActivity.openBookFragment("add", 0)
         }
         touchHelper.attachToRecyclerView(binding?.recycler)
         mainActivity.onBackPressedDispatcher.addCallback(mainActivity,
@@ -66,8 +74,8 @@ class RecyclerFragment : Fragment(), Listener {
 
     override fun onResume() {
         super.onResume()
-        viewModel.chooseSubd(requireContext(), activity as MainActivity)
         val mainActivity = activity as MainActivity
+        viewModel.chooseSubd(requireContext(), mainActivity)
         bookAdapter.submitList(viewModel.books.value)
         viewModel.chooseSort(requireContext())
         mainActivity.getBinding()?.toolbar?.navigationIcon =
@@ -82,8 +90,8 @@ class RecyclerFragment : Fragment(), Listener {
         super.onDestroy()
     }
 
-    override fun openBookFragmentForEdit(id:Int) {
+    override fun openBookFragmentForEdit(id: Int) {
         val mainActivity = activity as MainActivity
-        mainActivity.openBookFragment("edit",id)
+        mainActivity.openBookFragment("edit", id)
     }
 }

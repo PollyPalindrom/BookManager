@@ -22,7 +22,6 @@ class RecyclerFragmentViewModel(private val repository: BookRepository) : ViewMo
 
     fun chooseSort(context: Context) {
         val prefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val option = prefs.getString("list_preference", "не установлено")
         when (prefs.getString("list_preference", "не установлено")) {
             "1" -> {
                 books.value?.sortBy { it.title }
@@ -36,16 +35,16 @@ class RecyclerFragmentViewModel(private val repository: BookRepository) : ViewMo
         }
     }
 
+    fun setState(newState:Boolean){
+        repository.state = newState
+    }
+
     fun deleteItem(position: Int, context: Context) {
         val book = books.value?.get(position)
         viewModelScope.launch(Dispatchers.IO) {
-            if (book != null && PreferenceManager.getDefaultSharedPreferences(context)
-                    .getBoolean("room_or_cursor", true)
-            ) {
+            if (book != null) {
                 repository.delete(book)
-            } else if (book != null) {
-                repository.deleteBook(book)
-                books.postValue(repository.getAll() as MutableList<Book>?)
+                if(!repository.state) books.postValue(repository.getAll() as MutableList<Book>?)
             }
         }
     }
@@ -57,9 +56,9 @@ class RecyclerFragmentViewModel(private val repository: BookRepository) : ViewMo
                 viewModelScope.launch(Dispatchers.IO) {
                     books.postValue(repository.getAll() as MutableList<Book>?)
                 }
-                mainActivity.changeSubtitle("Cursor")
+                println("false")
             }
-            else -> mainActivity.changeSubtitle("Room")
+            else -> println("true")
         }
 
     }

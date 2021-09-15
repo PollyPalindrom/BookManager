@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.bookmanager.bookFragment.BookFragmentViewModel
 import com.example.bookmanager.recyclerFragment.RecyclerFragmentViewModel
 import com.example.bookmanager.repository.BookRepository
+import com.example.bookmanager.sortFragment.SortFragmentViewModel
 
 class ViewModelFactory(private val repository: BookRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -13,6 +14,9 @@ class ViewModelFactory(private val repository: BookRepository) : ViewModelProvid
         }
         if (modelClass.isAssignableFrom(BookFragmentViewModel::class.java)) {
             return BookFragmentViewModel(repository) as T
+        }
+        if (modelClass.isAssignableFrom(SortFragmentViewModel::class.java)) {
+            return SortFragmentViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

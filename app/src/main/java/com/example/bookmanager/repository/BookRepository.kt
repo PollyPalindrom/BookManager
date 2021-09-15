@@ -1,5 +1,8 @@
 package com.example.bookmanager.repository
 
+import android.app.Application
+import android.content.Context
+import androidx.preference.PreferenceManager
 import com.example.bookmanager.database.Book
 import com.example.bookmanager.database.BookDao
 import com.example.bookmanager.database.BookSQLiteOpenHelper
@@ -10,41 +13,51 @@ class BookRepository(
     private val cursorDatabase: BookSQLiteOpenHelper
 ) {
 
+    var state = true
     val books: Flow<MutableList<Book>> = bookDao.getAll()
 
     fun insert(book: Book) {
-        bookDao.insert(book)
+        if (state) bookDao.insert(book)
+        else insertBook(book)
+        println(state)
     }
 
     fun delete(book: Book) {
-        bookDao.delete(book)
+        if (state) bookDao.delete(book)
+        else deleteBook(book)
+        println(state)
     }
 
     fun update(book: Book) {
-        bookDao.update(book)
+        if (state) bookDao.update(book)
+        else updateBook(book)
+        println(state)
     }
 
     fun getBook(id: Int): Book {
-        return bookDao.getBook(id)
+        return if (state) bookDao.getBook(id)
+        else getBookCursor(id)
+        println(state)
     }
 
-    fun insertBook(book: Book) {
+    private fun insertBook(book: Book) {
         cursorDatabase.insertBook(book)
     }
 
-    fun updateBook(book: Book) {
+    private fun updateBook(book: Book) {
         cursorDatabase.updateBook(book)
     }
 
-    fun deleteBook(book: Book) {
+    private fun deleteBook(book: Book) {
         cursorDatabase.deleteBook(book)
     }
 
-    fun getBook(book: Book):Book {
-        return cursorDatabase.getBook(book.id)
+    private fun getBookCursor(id: Int): Book {
+        return cursorDatabase.getBook(id)
     }
 
-    fun getAll():List<Book>{
+    fun getAll(): List<Book> {
         return cursorDatabase.getAll()
+        println(state)
     }
 }
